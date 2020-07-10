@@ -33,7 +33,7 @@ enum DemoMode {
 byte mode = 0;
 
 Timer modeTimer;
-#define MODE_DURATION 2000
+#define MODE_DURATION 6000
   
 void setup() {
   // put your setup code here, to run once:
@@ -41,6 +41,12 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
+  // handle button presses
+  if( buttonPressed() ) {
+    modeTimer.set(0);
+  }
+  
   switch(mode) {
     
     case FADE:
@@ -91,7 +97,9 @@ void displayRotate() {
  * Rainbow Animation
  */
 void displayRainbow() {
-  setColor(GREEN);
+  FOREACH_FACE(f) {
+    setColorOnFace(makeColorHSB((millis()/5 + f*42) % 255, 255, 255), f);
+  }
 }
 
 /*
