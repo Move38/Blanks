@@ -26,17 +26,20 @@ enum DemoMode {
   FADE,
   ROTATE,
   RAINBOW,
-  WAVES,
   NUM_MODES
 };
 
-byte mode = 0;
+byte mode;
 
 Timer modeTimer;
 #define MODE_DURATION 6000
+
+byte bri[6];
   
 void setup() {
   // put your setup code here, to run once:
+  modeTimer.set( MODE_DURATION );
+  mode = FADE;
 }
 
 void loop() {
@@ -60,11 +63,7 @@ void loop() {
     case RAINBOW:
       displayRainbow();
       break;
-    
-    case WAVES:
-      displayWaves();
-      break;
-    
+        
     default:
       break;
   }
@@ -82,15 +81,68 @@ void loop() {
  * Fade Animation
  */
 void displayFade() {
-  setColor(BLUE);
-  // put code here for actual fade animation
+  Color col;
+  byte bri;
+  byte bla= map(sin8_C(bri), 0, 255, 127, 255);
+  // rise RED
+  if( modeTimer.getRemaining() > (MODE_DURATION * 5) / 6  ) {
+    col = RED;
+    bri = 255 * (MODE_DURATION - modeTimer.getRemaining()) / (MODE_DURATION / 6);
+  }
+  
+  // fall RED
+  else if( modeTimer.getRemaining() <= (MODE_DURATION * 5) / 6 &&
+           modeTimer.getRemaining() > (MODE_DURATION * 4) / 6 ) {
+    col = RED;
+    bri = 255 - (255 * (( MODE_DURATION * 5 ) / 6 - modeTimer.getRemaining()) / (MODE_DURATION / 6));
+  }
+
+  // rise GREEN
+  else if( modeTimer.getRemaining() <= (MODE_DURATION * 4) / 6 &&
+           modeTimer.getRemaining() > (MODE_DURATION * 3) / 6 ) {
+    col = GREEN;
+    bri = (255 * (( MODE_DURATION * 4 ) / 6 - modeTimer.getRemaining()) / (MODE_DURATION / 6));
+  }
+
+  // fall GREEN
+  else if( modeTimer.getRemaining() <= (MODE_DURATION * 3) / 6 &&
+           modeTimer.getRemaining() > (MODE_DURATION * 2) / 6 ) {
+    col = GREEN;
+    bri = 255 - (255 * (( MODE_DURATION * 3 ) / 6 - modeTimer.getRemaining()) / (MODE_DURATION / 6));
+  }
+
+  // rise BLUE
+  else if( modeTimer.getRemaining() <= (MODE_DURATION * 2) / 6 &&
+           modeTimer.getRemaining() > (MODE_DURATION * 1) / 6 ) {
+    col = BLUE;
+    bri = (255 * (( MODE_DURATION * 2 ) / 6 - modeTimer.getRemaining()) / (MODE_DURATION / 6));
+  }
+
+  // fall BLUE
+  else if( modeTimer.getRemaining() <= (MODE_DURATION * 1) / 6 &&
+           modeTimer.getRemaining() > (MODE_DURATION * 0) / 6 ) {
+    col = BLUE;
+    bri = 255 - (255 * (( MODE_DURATION * 1 ) / 6 - modeTimer.getRemaining()) / (MODE_DURATION / 6));
+  }
+  
+  setColor(dim(col,bri));
 }
 
 /*
  * Rotation Animation
  */
 void displayRotate() {
-  setColor(RED);
+  // rotate white around
+  setColor(OFF);
+  FOREACH_FACE(f) {
+    if ((millis() / 100) % 6 == f) {
+      bri[f] = 255;
+    }
+    if ( bri[f] >= 5 ) {
+      bri[f] -= 5;
+    }
+    setColorOnFace(dim(WHITE, bri[f]), f);
+  }
 }
 
 /*
@@ -98,7 +150,7 @@ void displayRotate() {
  */
 void displayRainbow() {
   FOREACH_FACE(f) {
-    setColorOnFace(makeColorHSB((millis()/5 + f*42) % 255, 255, 255), f);
+    setColorOnFace(makeColorHSB((millis()/10 + (5-f)*21) % 255, 255, 255), f);
   }
 }
 
