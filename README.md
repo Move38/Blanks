@@ -10,6 +10,8 @@ These Blinks should not look like they are part of a game. When not being intera
 4. Blinks can be forced to sleep - press an hold the top, an accelerating rotation builds and after 6 seconds the Blink flashes a _goodnight_ blue and goes dark, sending all neighboring Blinks to sleep as well.
 5. Blinks wake each other from a warm sleep. Put Blinks to sleep and then press a single Blink to see all connected Blinks awake with a rise and shine animation. 
 
+NOTE: food for thought below
+
 ### Debate about Sterility
 By design, all Blinks are created equal. However, calling Blanks "Blanks" does suggest that they are different. So what's different about them? At the moment, the only thing different about them is the little game label art on each of the Blinks is not part of the Blanks, and they don't come pre-loaded with a game. Blanks are designed to extend gameplay to more Blinks for the average user and can be used to store user created games by anyone with a developer kit or developer tools of their own.
 
