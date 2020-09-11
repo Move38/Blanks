@@ -140,7 +140,12 @@ void displayRotate() {
     durationHeld = millis() - buttonPressTime;
   
     // range for duration held alone is 0-3000, together 0-6000
-    rotateDuration = 75 - map(durationHeld, 0, 6000, 0, 70);
+    if(isAlone()) {
+      rotateDuration = 75 - map(durationHeld, 0, 3000, 0, 70);
+    }
+    else {
+      rotateDuration = 75 - map(durationHeld, 0, 6000, 0, 70);      
+    }
   
     if (rotateTimer.isExpired()) {
         rotateFace = (rotateFace + 1) % 6;
@@ -159,6 +164,7 @@ void displayRotate() {
   else {
     setColor(dim(WHITE, 127));
   }  
+
 }
 
 /*
