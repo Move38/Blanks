@@ -34,6 +34,10 @@ Timer fadeTimer;
 
 byte bri[6];
 
+
+bool hasNeighbor[6];
+uint32_t attachTime[6];
+
 byte rotateDuration;
 uint32_t buttonPressTime;
 byte rotateFace = 0;
@@ -164,6 +168,26 @@ void displayRotate() {
   else {
     setColor(dim(WHITE, 127));
   }  
+
+
+  // animate on neighbor attach
+  FOREACH_FACE(f) {
+    if(!isValueReceivedOnFaceExpired(f)) {
+      if(!hasNeighbor[f]) {
+        attachTime[f] = millis();
+      }
+      hasNeighbor[f] = true;
+    }
+    else {
+      hasNeighbor[f] = false;
+    }
+
+    uint32_t timeSinceAttach = millis() - attachTime[f];
+    if( timeSinceAttach < 300 ) {
+      byte briAttach = 227 - map(timeSinceAttach, 0, 300, 0, 100);
+      setColorOnFace(dim(WHITE, briAttach), f);    
+    }
+  }
 
 }
 
