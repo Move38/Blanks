@@ -45,7 +45,7 @@ Timer rotateTimer;
   
 void setup() {
   // put your setup code here, to run once:
-  mode = RAINBOW;
+  mode = ROTATE;
 }
 
 void loop() {
@@ -198,11 +198,4 @@ void displayRainbow() {
   FOREACH_FACE(f) {
     setColorOnFace(makeColorHSB((millis()/3 + (5-f)*42) % 255, 255, 255), f);
   }
-}
-
-/*
- * Waves Animation
- */
-void displayWaves() {
-  setColor(ORANGE);
 }
